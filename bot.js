@@ -37,24 +37,24 @@ client.on('message', async (message) => {
     const messageArray = message.content.split(' ');
     if (!message.guild) return;
 
-    switch (messageArray[0]) {
-        case '!/play':
-            const connection = await message.member.voice.channel.join();
-            if (messageArray.length > 0) {
-                musicArray.push(messageArray[1]);
-                console.log(musicArray);
-            }
-            const dispatcher = connection.play(youtube_music(musicArray[1], { filter: 'audioonly' }));
-            dispatcher.setVolume(messageArray[2]);
+    if (messageArray[0] === '!/play') {
+        const connection = await message.member.voice.channel.join();
 
-            return dispatcher.on('finish', () => {
-                console.log('Finished playing!');
-                musicArray.shift();
-            });
-        case '-stop':
-            return dispatcher.pause();
-        default:
-            return;
+        if (messageArray.length > 0) {
+            musicArray.push(messageArray[1]);
+            console.log(`${typeof musicArray[0]} at line 45`);
+        }
+
+        const dispatcher = connection.play(youtube_music(musicArray[0], { filter: 'audioonly' }));
+
+        dispatcher.on('finish', () => {
+            console.log('Finished playing!');
+            musicArray.shift();
+        });
     }
+
+    if (messageArray[0] === '!/stop') {
+    }
+
     console.log(`jj is here`);
 });
