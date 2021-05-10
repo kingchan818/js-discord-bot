@@ -1,15 +1,17 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const youtube_music = require('ytdl-core');
-const axios = require('axios').default;
 
 const client = new Discord.Client();
 client.login(`${process.env.BOT_TOKEN}`);
 
 client.on('ready', () => {
-    console.log('hello i got a jj ');
+    console.log('\x1b[36m', ' ======>   connected............');
     client.user.setActivity('with his dick', { type: 'PLAYING' });
 });
+
+const musicArray = [];
+var isplaying = false;
 
 client.on('message', async (msg) => {
     let token = msg.content.split(' ');
@@ -33,28 +35,55 @@ client.on('message', async (msg) => {
 });
 
 client.on('message', async (message) => {
-    let musicArray = [];
     const messageArray = message.content.split(' ');
-    if (!message.guild) return;
+    if (!message.member.voice.channel) return message.channel.send(' someone come in ');
 
     if (messageArray[0] === '!/play') {
-        const connection = await message.member.voice.channel.join();
+        var connection = await message.member.voice.channel.join();
+        play(connection, messageArray[1], messageArray);
+    }
+    if (messageArray[0] === '!/stop') {
+        var connection = await message.member.voice.channel.join();
+        stop(connection, messageArray[1]);
+    }
+    if (messageArray[0] === '!/add') {
+        add(messageArray[1], message);
+    }
+});
 
-        if (messageArray.length > 0) {
-            musicArray.push(messageArray[1]);
-            console.log(`${typeof musicArray[0]} at line 45`);
-        }
+async function play(connection, url, messageArray) {
+    if (messageArray.length > 0) {
+        musicArray.push(url);
+        console.log(musicArray);
+    }
 
-        const dispatcher = connection.play(youtube_music(musicArray[0], { filter: 'audioonly' }));
+    for (i = 0; i < musicArray.length; i++) {
+        console.log(musicArray.length);
+        let music = youtube_music(url, { filter: 'audioonly' });
+        let dispatcher = connection.play(music);
 
+        isplaying = true;
         dispatcher.on('finish', () => {
             console.log('Finished playing!');
             musicArray.shift();
+            isplaying = false;
+            console.log(musicArray);
         });
     }
+}
 
-    if (messageArray[0] === '!/stop') {
+function stop(connection, url) {
+    if (isplaying) {
+        connection.play(youtube_music(url, { filter: 'audioonly' })).pause();
+        console.log('stop');
+        isplaying = false;
+        console.log('isplaying ====>', isplaying);
     }
+}
 
-    console.log(`jj is here`);
-});
+function add(url, message) {
+    // add non playing songs to music array
+    musicArray.push(url);
+    message.channel.send(' song add to queue ');
+    console.log(musicArray);
+}

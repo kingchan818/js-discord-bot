@@ -1,7 +1,6 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,5 +15,15 @@
     "ffmpeg-static": "^4.3.0",
     "nodemon": "^2.0.7",
     "ytdl-core": "^4.7.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingchan818/js-discord-bot.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/kingchan818/js-discord-bot/issues"
+  },
+  "homepage": "https://github.com/kingchan818/js-discord-bot#readme",
+  "description": ""
 }
