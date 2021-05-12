@@ -36,7 +36,7 @@ client.on('message', async (msg) => {
 
 client.on('message', async (message) => {
     const messageArray = message.content.split(' ');
-    if (!message.member.voice.channel) return message.channel.send(' someone come in ');
+    if (!message.member.voice.channel) return;
 
     if (messageArray[0] === '!/play') {
         var connection = await message.member.voice.channel.join();
@@ -51,7 +51,7 @@ client.on('message', async (message) => {
     }
 });
 
-async function play(connection, url, messageArray) {
+async function play(connection, url, messageArray, message) {
     if (messageArray.length > 0) {
         musicArray.push(url);
         console.log(musicArray);
